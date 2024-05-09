@@ -120,6 +120,30 @@ const FormScreen = ({ navigation }) => {
         Alert.alert("Error", "Something went wrong");
       }
     }, 3000);
+
+    fetch("/predict", {    //TODO: add the backend address here
+      method: 'POST',
+      headers:{
+       'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({     //TODO: to edit with the updated values
+       address: inputs.address,
+       name: inputs.name,
+       type: inputs.type,
+       bedrooms: inputs.bedrooms,
+       bathrooms: inputs.bathrooms,
+       size: inputs.size,
+       age: inputs.age,
+       tenure: inputs.tenure,
+       units: inputs.units,
+       district: inputs.district,
+       amenities: inputs.amenities,
+      }),
+   })
+   .then((response) => response.json())
+   .catch((error) => {
+      console.error(error);
+   });
   };
 
   const handleOnchange = (text, input) => {
