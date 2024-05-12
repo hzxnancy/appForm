@@ -26,7 +26,7 @@ import Loader from "../components/loader";
 
 const FormScreen = ({ navigation }) => {
   //declare all inputs
-  const [inputs, setInputs] = React.useState({
+  const [inputs, setInputs] = useState({
     address: "",
     name: "",
     type: "",
@@ -39,10 +39,10 @@ const FormScreen = ({ navigation }) => {
     district: "",
     amenities: "",
   });
-  const [price, setPrice] = React.useState(0);
+  const [price, setPrice] = useState(0);
 
-  const [errors, setErrors] = React.useState({});
-  const [loading, setLoading] = React.useState(false);
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
   //error handling
   const validate = () => {
@@ -96,12 +96,13 @@ const FormScreen = ({ navigation }) => {
     }
   };
 
-  // Submit the values given
   const submit = () => {
+    setLoading(true); // Set loading state when starting the process
+  
     fetch("http://10.0.2.2:5000/predict", {
       method: 'POST',
       headers:{
-       'Content-Type': 'application/json',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         address: inputs.address,
@@ -116,43 +117,33 @@ const FormScreen = ({ navigation }) => {
         district: inputs.district,
         amenities: inputs.amenities,
       }),
-   })
-   .then(resp => resp.json())
-   .then(data => {
-    console.log(data.predictions);
-    const nextPrice = data.predictions;
-    setPrice(nextPrice);
-    updatePrice(nextPrice);
-    console.log(price);
-    console.log("Updated price: ", nextPrice)
-  })
-   .catch(e => console.error("Error encountered: ", e));
-
-    //navigate to the results page
-    setLoading(true);
-    setTimeout(() => {
+    })
+    .then(resp => resp.json())
+    .then(data => {
+      const nextPrice = data.predictions;
+      setPrice(nextPrice);
+      
+      // Set loading to false after fetching and setting the price
       setLoading(false);
-      try {
+      
+      // Delay navigation to ensure the price state is updated
+      setTimeout(() => {
+        // Navigate to the result screen with updated inputs and price
         AsyncStorage.setItem("user", JSON.stringify(inputs));
         navigation.navigate("ResultScreen", {
-          address: inputs.address,
-          name: inputs.name,
-          type: inputs.type,
-          bedrooms: inputs.bedrooms,
-          bathrooms: inputs.bathrooms,
-          size: inputs.size,
-          age: inputs.age,
-          tenure: inputs.tenure,
-          units: inputs.units,
-          district: inputs.district,
-          amenities: inputs.amenities,
-          price: price
+          ...inputs,
+          price: nextPrice
         });
-      } catch (error) {
-        Alert.alert("Error", "Something went wrong");
-      }
-    }, 3000);
-
+      }, 0); // No delay needed here, but setTimeout ensures it's placed in the event queue after state updates
+    })
+    .catch(error => {
+      console.error("Error encountered: ", error);
+      // Handle error, e.g., show error message to user
+      Alert.alert("Error", "Something went wrong");
+      
+      // Reset loading state if an error occurs
+      setLoading(false);
+    });
   };
   
   const updatePrice = (nextPrice) => setPrice(nextPrice);
