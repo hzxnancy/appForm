@@ -1,3 +1,4 @@
+import json
 import numpy as np
 import pandas as pd
 import joblib
@@ -14,17 +15,6 @@ app = Flask(__name__)
 @app.route("/")
 def home():
     return "Hello world"
-
-def geocode_address(addr, geocode):
-    try:
-        location = geocode(f"{addr}, Singapore")
-        if location and 'Singapore' in location.address:
-            return pd.Series([location.latitude, location.longitude])
-        else:
-            return pd.Series([None, None])
-    except Exception as e:
-        return pd.Series([None, None])
-
 
 @app.route("/predict", methods=["POST"])
 def predict():
@@ -45,7 +35,6 @@ def predict():
     data = [[property_type, bedrooms, bathrooms, size, age, years_left, amenities, districts, address]] 
     cols = ['Property Type', 'Bedrooms', 'Bathrooms', 'Size', 'Age', 'Years_Left', 'No. of Amenities', 'Districts', 'Address']    
     df = pd.DataFrame(data, columns=cols)
-    print("Dataframe created")
 
     for i in range(1, 29):
         df[f'District_{i}'] = 0
@@ -74,7 +63,7 @@ def predict():
             chunk = df.iloc[start_idx:end_idx]
             chunk[['Latitude', 'Longitude']] = chunk['Address'].apply(lambda x: geocode_address(x, geocode))
             chunk.to_csv(f'geocoded_addresses_{start_idx}_{end_idx}.csv', index=False)
-            print(f"Processed and saved chunk {i+1}/{num_chunks} (rows {start_idx} to {end_idx})")
+            # print(f"Processed and saved chunk {i+1}/{num_chunks} (rows {start_idx} to {end_idx})")
 
     process_addresses(df)
     df = pd.read_csv("geocoded_addresses_0_1000.csv")
@@ -94,18 +83,15 @@ def predict():
     df = add_spatial_density(df)
 
     # Scale numerical columns
-    scaler = joblib.load('scaler.joblib')
+    scaler = joblib.load('backend/scaler.joblib')
     numeric_cols = ['Bedrooms', 'Bathrooms', 'Size', 'Age', 'Years_Left', 'No. of Amenities', 'spatial_density']
     df[numeric_cols] = scaler.transform(df[numeric_cols])
-    print("Finished scaling numerical data")
-    print(df)
     df.drop(columns=['Address', 'Latitude', 'Longitude'], inplace=True)
 
     # Use the model for predictions
-    model = joblib.load('model.joblib')
+    model = joblib.load('backend/model.joblib')
     predictions = model.predict(df)
-    print("made predictions")
-    print(predictions)
+    print(f"Predictions: {predictions[0]}")
     return {"predictions": predictions[0]}
 
 if __name__ == "__main__":
