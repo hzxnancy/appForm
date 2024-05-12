@@ -1,5 +1,6 @@
 # How to run the app?
-### Backend
+## Frontend
+## Backend
 1. Download [model](https://drive.google.com/file/d/1RQWkeXulEfwPFtIGi4vxkJsgXSohcAUF/view) and rename to `model.joblib`
 2. Download [scaler](https://drive.google.com/file/d/1-1zIsoZpRvZloJy0zsb1Br7m6Nh7jSIl/view) and rename to `scaler.joblib`
 3. Place both `model.joblib` and `scaler.joblib` in the backend folder
