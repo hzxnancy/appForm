@@ -29,7 +29,7 @@ const ResultScreen = ({ navigation }) => {
         <Text style={{marginLeft: 20, marginTop:3, fontSize: 12}}>Address: {address}</Text>
         <Text style={{marginLeft: 20, fontSize: 12}}>District: {district}</Text>
         <Text style={{marginLeft: 20, marginTop: 10, fontSize: 15, textDecorationLine: "underline"}}>The predicted price is:</Text>
-        <Text style={{marginLeft: 20, marginTop: 15, fontSize: 35}}>$1,200,000</Text>
+        <Text style={{marginLeft: 20, marginTop: 15, fontSize: 35}}>{price}</Text>
         <Text style={{marginLeft: 20, marginTop: 25, fontSize: 20}}>Description:</Text>
         <View style={style.descriptionContainer}>
             <FontAwesome5 name = "house-user" style={style.icon}/>
