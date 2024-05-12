@@ -104,17 +104,17 @@ const FormScreen = ({ navigation }) => {
        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        "address": "30 TANAH MERAH KECHIL ROAD, EAST MEADOWS, 465558",
-        "name": "EAST MEADOWS",
-        "type": "0",
-        "bedrooms": "2",
-        "bathrooms": "3",
-        "size": "1000",
-        "age": "7",
-        "tenure": "20",
-        "units": "10",
-        "district": "23",
-        "amenities": "3"
+        address: inputs.address,
+        name: inputs.name,
+        type: inputs.type,
+        bedrooms: inputs.bedrooms,
+        bathrooms: inputs.bathrooms,
+        size: inputs.size,
+        age: inputs.age,
+        tenure: inputs.tenure,
+        units: inputs.units,
+        district: inputs.district,
+        amenities: inputs.amenities,
       }),
    })
    .then(resp => resp.json())
