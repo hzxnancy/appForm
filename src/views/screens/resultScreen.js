@@ -19,9 +19,10 @@ const ResultScreen = ({ navigation }) => {
     units,
     district,
     amenities,
+    price
   } = route.params;
-  console.log(type);
-
+  console.log(price);
+  
   return(
     <ScrollView style={{backgroundColor: COLORS.white, flex: 1}}>
         <Text style={{marginTop: 35, fontSize: 25, fontWeight:"700", marginLeft: 20}}>{name}</Text>

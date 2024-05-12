@@ -39,6 +39,7 @@ const FormScreen = ({ navigation }) => {
     district: "",
     amenities: "",
   });
+  const [price, setPrice] = React.useState(0);
 
   const [errors, setErrors] = React.useState({});
   const [loading, setLoading] = React.useState(false);
@@ -95,8 +96,38 @@ const FormScreen = ({ navigation }) => {
     }
   };
 
-  //submit the values given (with the fetch command)
+  // Submit the values given
   const submit = () => {
+    fetch("http://10.0.2.2:5000/predict", {
+      method: 'POST',
+      headers:{
+       'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        address: inputs.address,
+        name: inputs.name,
+        type: inputs.type,
+        bedrooms: inputs.bedrooms,
+        bathrooms: inputs.bathrooms,
+        size: inputs.size,
+        age: inputs.age,
+        tenure: inputs.tenure,
+        units: inputs.units,
+        district: inputs.district,
+        amenities: inputs.amenities,
+      }),
+   })
+   .then(resp => resp.json())
+   .then(data => {
+    console.log(data.predictions);
+    const nextPrice = data.predictions;
+    setPrice(nextPrice);
+    updatePrice(nextPrice);
+    console.log(price);
+    console.log("Updated price: ", nextPrice)
+  })
+   .catch(e => console.error("Error encountered: ", e));
+
     //navigate to the results page
     setLoading(true);
     setTimeout(() => {
@@ -115,37 +146,16 @@ const FormScreen = ({ navigation }) => {
           units: inputs.units,
           district: inputs.district,
           amenities: inputs.amenities,
+          price: price
         });
       } catch (error) {
         Alert.alert("Error", "Something went wrong");
       }
     }, 3000);
 
-    fetch("/predict", {    //TODO: add the backend address here
-      method: 'POST',
-      headers:{
-       'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({     //TODO: to edit with the updated values
-       address: inputs.address,
-       name: inputs.name,
-       type: inputs.type,
-       bedrooms: inputs.bedrooms,
-       bathrooms: inputs.bathrooms,
-       size: inputs.size,
-       age: inputs.age,
-       tenure: inputs.tenure,
-       units: inputs.units,
-       district: inputs.district,
-       amenities: inputs.amenities,
-      }),
-   })
-   .then((response) => response.json())
-   .catch((error) => {
-      console.error(error);
-   });
   };
-
+  
+  const updatePrice = (nextPrice) => setPrice(nextPrice);
   const handleOnchange = (text, input) => {
     setInputs((prevState) => ({ ...prevState, [input]: text }));
   };
