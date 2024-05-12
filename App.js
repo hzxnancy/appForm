@@ -3,6 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import formScreen from "./src/views/screens/formScreen";
 import ResultScreen from "./src/views/screens/resultScreen";
+import ResultScreenBackup from "./src/backups/resultScreenBackup";
 
 const Stack = createNativeStackNavigator();
 
