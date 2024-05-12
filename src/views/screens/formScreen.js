@@ -146,7 +146,6 @@ const FormScreen = ({ navigation }) => {
     });
   };
   
-  const updatePrice = (nextPrice) => setPrice(nextPrice);
   const handleOnchange = (text, input) => {
     setInputs((prevState) => ({ ...prevState, [input]: text }));
   };
