@@ -1,7 +1,7 @@
 # How to run the app?
 ## Frontend
 1. Install Expo Go on your mobile device.
-2. Clone the repository to your local machine:
+2. Clone the repository to your local machine: https://github.com/hzxnancy/appForm.git
 3. Install dependencies `npm install`
 4. Run app: `npx expo start`
 ## Backend
