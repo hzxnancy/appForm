@@ -1,5 +1,9 @@
 # How to run the app?
 ## Frontend
+1. Install Expo Go on your mobile device.
+2. Clone the repository to your local machine:
+3. Install dependencies `npm install`
+4. Run app: `npx expo start`
 ## Backend
 1. Download [model](https://drive.google.com/file/d/1RQWkeXulEfwPFtIGi4vxkJsgXSohcAUF/view) and rename to `model.joblib`
 2. Download [scaler](https://drive.google.com/file/d/1-1zIsoZpRvZloJy0zsb1Br7m6Nh7jSIl/view) and rename to `scaler.joblib`
